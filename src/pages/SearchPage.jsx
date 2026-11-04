@@ -4,7 +4,7 @@ import { fetchPokemon } from '../api/pokeapi'
 import PokemonCard from '../components/PokemonCard'
 import DetailModal from '../components/DetailModal'
 
-export default function SearchPage() {
+export default function SearchPage(onAdd) {
     const [status, setStatus] = useState('idle') // idle | loading | success | not-found | error
     const [pokemon, setPokemon] = useState(null)
     const [modalOpen, setModalOpen] = useState(false)
@@ -35,7 +35,7 @@ export default function SearchPage() {
             {status === "loading" && <p role="status">Loading...</p>}
             {status === "not-found" && <p role="alert">No Pokémon matched...</p>}
             {status === "error" && <p role="alert">Couldn't reach PokéAPI...</p>}
-            {status === "success" && <PokemonCard pokemon={pokemon} onDetails={onDetails} />}
+            {status === "success" && <PokemonCard pokemon={pokemon} onDetails={onDetails} add={onAdd} />}
             {modalOpen && <DetailModal pokemon={pokemon} onClose={onClose}/>}
         </>
         </>
