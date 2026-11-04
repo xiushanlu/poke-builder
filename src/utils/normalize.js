@@ -4,7 +4,7 @@ export function normalizePokemon(raw) {
     return {
         id: raw.id, 
         name: raw.name, 
-        image: raw.sprites.other?.official_artwork?.front_default ?? raw.sprites?.front_default ?? PLACEHOLDER,      // TODO: official artwork, else sprites.front_default, else PLACEHOLDER
+        image: raw.sprites.other?.['official-artwork']?.front_default ?? raw.sprites?.front_default ?? PLACEHOLDER,
         types: raw.types.map(t => t.type.name),
         stats: raw.stats.map(s => ({
             name: s.stat.name, 

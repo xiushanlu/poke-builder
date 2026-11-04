@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-export default function SearchForm({ onSearch }) {
+export default function SearchForm({ onSearch, disabled }) {
     const [query, setQuery] = useState('');
     const [error, setError] = useState('');
     const [submitted, setSubmitted] = useState('');
@@ -22,7 +22,7 @@ export default function SearchForm({ onSearch }) {
         <form onSubmit={handleSubmit}>
             <label htmlFor="search">Name or Pokédex number</label><br></br>
             <input type="text" name="search" id="search" onChange={e => setQuery(e.target.value)} value={query}></input>
-            <input type="submit" value="Search"></input>
+            <input type="submit" value={!disabled ? "Search" : "Searching..."} disabled={disabled}></input>
                 {error && <p role="alert">{error}</p>}
                 {!error && submitted && <p>Searching for: <strong>{submitted}</strong></p>}
         </form>
