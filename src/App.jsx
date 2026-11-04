@@ -5,7 +5,7 @@ import TeamPage from './pages/TeamPage'
 import './App.css'
 
 export default function App() {
-  const [team, setTeam] = useState([])
+  const [team, setTeam] = useState([]);
 
   return (
     <>
