@@ -20,7 +20,7 @@ export default function SearchForm({ onSearch }) {
 
     return (
         <form onSubmit={handleSubmit}>
-            <label htmlFor="search">Name or Pokédex number</label>
+            <label htmlFor="search">Name or Pokédex number</label><br></br>
             <input type="text" name="search" id="search" onChange={e => setQuery(e.target.value)} value={query}></input>
             <input type="submit" value="Search"></input>
                 {error && <p role="alert">{error}</p>}
