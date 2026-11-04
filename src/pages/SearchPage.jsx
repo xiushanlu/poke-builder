@@ -1,3 +1,13 @@
+import SearchForm from '../components/SearchForm'
+
 export default function SearchPage() {
-  return <h2>Search</h2>
+  function handleSearch(query) {
+    console.log('search for', query)
+  }
+  return (
+    <>
+      <h2>Search</h2>
+      <SearchForm onSearch={handleSearch} />
+    </>
+  )
 }
