@@ -22,10 +22,21 @@ export default function App() {
     setTeam(removeFromTeam(team, id));
   }
 
-  // Routes now pass props:
-  // <SearchPage onAdd={handleAdd} />
-  // <TeamPage team={team} onRemove={handleRemove} />
-  // and render {message && <p role="status">{message}</p>} near the nav
+  async function handleRandom(randomTeam) {
+    try {
+        const res = await fetch('/api/random-team');
+        console.log(res);
+        const newTeam = await res.json();
+        console.log(newTeam);
+        setTeam(newTeam);
+    } catch {
+        setMessage("error");
+    }
+  }
+
+  function handleAnalyze() {
+
+  }
 
   return (
     <>
@@ -37,7 +48,7 @@ export default function App() {
       <main>
         <Routes>
           <Route path="/" element={<SearchPage onAdd={handleAdd} />} />
-          <Route path="/team" element={<TeamPage onRemove={handleRemove} team={team} />} />
+          <Route path="/team" element={<TeamPage onRemove={handleRemove} team={team} onRandom={handleRandom} onAnalyze={handleAnalyze} />} />
         </Routes>
       </main>
     </>

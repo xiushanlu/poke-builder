@@ -14,6 +14,5 @@ export function addToTeam(team, pokemon) {
 }
 
 export function removeFromTeam(team, id) {
-    console.log(team.filter(p => p.id!=id));
     return team.filter(p => p.id!=id);
 }
