@@ -22,7 +22,7 @@ export default function App() {
     setTeam(removeFromTeam(team, id));
   }
 
-  async function handleRandom(randomTeam) {
+  async function handleRandom() {
     try {
         const res = await fetch('/api/random-team');
         console.log(res);
@@ -48,7 +48,7 @@ export default function App() {
       <main>
         <Routes>
           <Route path="/" element={<SearchPage onAdd={handleAdd} />} />
-          <Route path="/team" element={<TeamPage onRemove={handleRemove} team={team} onRandom={handleRandom} onAnalyze={handleAnalyze} />} />
+          <Route path="/team" element={<TeamPage onRemove={handleRemove} team={team} onRandom={handleRandom} />} />
         </Routes>
       </main>
     </>
