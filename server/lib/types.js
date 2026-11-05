@@ -1,36 +1,41 @@
-let chart = null // { ground: { electric: 2, grass: 0.5, flying: 0, ... }, ... }
+let chart = null; // { ground: { electric: 2, grass: 0.5, flying: 0, ... }, ... }
+const SKIP = ['stellar', 'shadow', 'unknown']; // not normal battle types; their relations are empty
 
 export async function getChart() {
-    if (chart) return chart // type data never changes: fetch once per server run
+    if (chart) return chart; // type data never changes: fetch once per server run
 
-    const res = await fetch('https://pokeapi.co/api/v2/type');
-    if (!res.ok) throw new Error('PokéAPI answered ' + res.status + ' for id ' + id);
+    // CHANGED: ?limit=50. PokéAPI lists return 20 per page by default, which can cut types off
+    const res = await fetch('https://pokeapi.co/api/v2/type?limit=50');
+    if (!res.ok) throw new Error('PokéAPI answered ' + res.status + ' for the type list'); // CHANGED: there's no id here
     const data = await res.json();
     const typeList = data.results;
+    const built = {}; // CHANGED: build into a real object; chart is null, and null[x] = ... crashes
     for (let i = 0; i < typeList.length; i++) {
-        let typeName = typeList[i].name;
-        let typeURL = typeList[i].url;
-        // we do not account for stellar, shadow, and unknown because they have empty relations
-        if (typeName != "stellar" || typeName != "shadow" || typeName != "unknown") {
+        const typeName = typeList[i].name;
+        const typeURL = typeList[i].url;
+        if (!SKIP.includes(typeName)) { // CHANGED: the || version was true for every name
             const typeRes = await fetch(typeURL);
-            if (!typeRes.ok) throw new Error('PokéAPI answered ' + typeRes.status + ' for id ' + id);
+            if (!typeRes.ok) throw new Error('PokéAPI answered ' + typeRes.status + ' for type ' + typeName);
             const typeData = await typeRes.json();
+            const rel = typeData.damage_relations;
             const mults = {};
-            typeData.damage_relations.no_damage_from.map(t => mults[t.name] = 0);
-            typeData.damage_relations.half_damage_from.map(t => mults[t.name] = 0.5);
-            typeData.damage_relations.double_damage_from.map(t => mults[t.name] = 2);
-            chart[typeName] = mults;
+            // CHANGED: _to (what this type does when attacking), not _from (what it takes)
+            for (const t of rel.no_damage_to) mults[t.name] = 0;
+            for (const t of rel.half_damage_to) mults[t.name] = 0.5;
+            for (const t of rel.double_damage_to) mults[t.name] = 2;
+            built[typeName] = mults;
         }
     }
+    chart = built; // CHANGED: save it for next time
     return chart;
 }
 
 export function multiplier(chart, attackType, defenderTypes) {
     let mul = 1;
-    for (const defender of defenderType) {
-        if (chart[attackType].keys().includes(defender)){
-            mul *= chart[attackType][defender];
-        }
+    // CHANGED: const + of (values, not indexes); defenderTypes with the s
+    for (const defender of defenderTypes) {
+        // CHANGED: missing entry means a normal hit, x1
+        mul *= chart[attackType]?.[defender] ?? 1;
     }
     return mul;
 }
