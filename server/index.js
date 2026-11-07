@@ -5,7 +5,7 @@ import { getPokemonById } from './lib/pokeapi.js';
 import { getChart, multiplier } from './lib/types.js';
 
 const POOL_MIN = 1;
-const POOL_MAX = 151;
+const POOL_MAX = 1025;
 const MAX_TEAM = 6;
 
 const app = express() // makes the server
