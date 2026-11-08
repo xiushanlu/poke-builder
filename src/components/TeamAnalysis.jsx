@@ -12,7 +12,7 @@ export default function TeamAnalysis({ teamIDs }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ids: teamIDs }),
       })
-      if (!response.ok) { setStatus('error'); return }
+      if (!res.ok) {setMessage(data.error?.message ?? "Couldn't analyze your team."); return;}
       setResult(await response.json())
       setStatus('success')
     } catch {

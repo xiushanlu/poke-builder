@@ -34,7 +34,7 @@ export default function App() {
           if (!res.ok) {setMessage(data.error?.message ?? "Couldn't get a random team."); return;}
           setTeam(data);
           setMessage('');
-      } catch (err) {
+      } catch {
           setMessage("Couldn't reach the server.");
       }
     }
