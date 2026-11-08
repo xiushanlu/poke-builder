@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Routes, Route, Link } from 'react-router-dom'
 import SearchPage from './pages/SearchPage'
 import TeamPage from './pages/TeamPage'
+import SharedTeamPage from './pages/SharedTeamPage'
 import './App.css'
 import { addToTeam, removeFromTeam } from './utils/team'
 import { loadTeam, saveTeam } from './utils/storage'
@@ -76,6 +77,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<SearchPage onAdd={handleAdd} />} />
           <Route path="/team" element={<TeamPage onRemove={handleRemove} team={team} onRandom={handleRandom} name={name} setName={setName}/>} />
+          <Route path="/shared/:shareId" element={<SharedTeamPage />} />
         </Routes>
       </main>
     </>
