@@ -23,14 +23,19 @@ export default function App() {
   }
 
   async function handleRandom() {
-    let response = confirm("Do you want to generate a random team? This will replace your current team.");
+    let response = true;
+    if (team.length > 0){
+      response = confirm("Do you want to generate a random team? This will replace your current team.");
+    } 
     if (response) {
       try {
           const res = await fetch('/api/random-team');
-          const newTeam = await res.json();
-          setTeam(newTeam);
-      } catch {
-          setMessage("error");
+          const data = await res.json();
+          if (!res.ok) {setMessage(data.error?.message ?? "Couldn't get a random team."); return;}
+          setTeam(data);
+          setMessage('');
+      } catch (err) {
+          setMessage("Couldn't reach the server.");
       }
     }
   }

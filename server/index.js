@@ -32,7 +32,7 @@ app.get('/api/random-team', async (req, res) => {
 app.post('/api/analyze-team', async (req, res) => { 
     const { ids } = req.body ?? {}; 
     if (!Array.isArray(ids) || ids.length < 1 || ids.length > MAX_TEAM
-        || !ids.every(Number.isInteger) || new Set(ids).size !== ids.length) {
+        || !ids.every(id => Number.isInteger(id) && id > 0) || new Set(ids).size !== ids.length) {
         return sendError(res, 400, 'INVALID_TEAM', 'Send 1 to ' + MAX_TEAM + ' different whole-number ids.');
     }
 
@@ -54,6 +54,7 @@ app.post('/api/analyze-team', async (req, res) => {
         res.json(analysis);
     } catch (err) {
         console.error(err);
+        if (err.code === 'NOT_FOUND') return sendError(res, 400, 'INVALID_TEAM', err.message);
         sendError(res, 502, 'UPSTREAM_FAILED', 'PokéAPI is unavailable. Try again.');
     }
 });

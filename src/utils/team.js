@@ -4,9 +4,9 @@ export const MAX_TEAM = 6
 export function addToTeam(team, pokemon) {
     let error = null;
     if (team.map(p => p.id).includes(pokemon.id)){
-        error = 'duplicate';
+        error = pokemon.name[0].toUpperCase()+pokemon.name.slice(1) + ' is already on your team.';
     } else if (team.length == MAX_TEAM){
-        error = 'full';
+        error = 'Your team already has 6 Pokemon!';
     } else {
         team = [...team, pokemon];
     }

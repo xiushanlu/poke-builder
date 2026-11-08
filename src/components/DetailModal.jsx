@@ -22,11 +22,11 @@ export default function DetailModal({ pokemon, onClose }) {
             <img alt={pokemon.name} src={pokemon.image}></img>
             <h3>{pokemon.name.split('-').map(s => s[0].toUpperCase()+s.substring(1)).join(' ')}</h3>
             <p>{'#'+pokemon.id.toString().padStart(3, '0')}</p>
-            {pokemon.types.map(t => <p className={"type "+t}>{t}</p>)}
+            {pokemon.types.map(t => <p key={t} className={"type "+t}>{t}</p>)}
             <h4>Abilities</h4>
-            {pokemon.abilities.map(a => (<p>{a}</p>))}
+            {pokemon.abilities.map(a => (<p key={a}>{a}</p>))}
             <h4>Base Stats</h4>
-            {pokemon.stats.map(s => (<div className="statsRow"><p className="stat">{s.name}</p><p className="statValue">{s.value}</p></div>))}
+            {pokemon.stats.map(s => (<div key={s.name} className="statsRow"><p className="stat">{s.name}</p><p className="statValue">{s.value}</p></div>))}
             <button ref={closeRef} onClick={onClose}>Close</button>
         </div>
         </div>

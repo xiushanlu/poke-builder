@@ -1,6 +1,6 @@
 export default function PokemonCard({ pokemon, onDetails, add}) {
     function onAdd(){
-        add.onAdd(pokemon);
+        add(pokemon);
     }
 
     return (<div>
