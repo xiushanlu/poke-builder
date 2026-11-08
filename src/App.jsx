@@ -1,13 +1,37 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Routes, Route, Link } from 'react-router-dom'
 import SearchPage from './pages/SearchPage'
 import TeamPage from './pages/TeamPage'
 import './App.css'
 import { addToTeam, removeFromTeam } from './utils/team'
+import { loadTeam, saveTeam } from './utils/storage'
+import { getPokemonById } from '../server/lib/pokeapi.js';
 
 export default function App() {
   const [team, setTeam] = useState([]);
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState('');
+  const [name, setName] = useState('My Team');
+  const [isLoading, setIsLoading] = useState(true);
+  const [saved] = useState(() => loadFromLocalStorage()); // read local storage only on first render
+
+  useEffect(() => {
+    if (!isLoading) {
+      saveTeam(team, name);
+    }
+  }, [team, name, isLoading]) // saves every render where team changes
+
+  async function loadFromLocalStorage(){
+    try {
+      let load = loadTeam();
+      setName(load.name);
+      let loaded = await Promise.all(load.pokemonIds.map(p => getPokemonById(p)));
+      setTeam(loaded);
+    } catch {
+      setMessage('Failed to load your team.');
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   function handleAdd(pokemon) {
     const result = addToTeam(team, pokemon);
@@ -18,6 +42,7 @@ export default function App() {
       setMessage('');
     }
   }
+
   function handleRemove(id) {
     setTeam(removeFromTeam(team, id));
   }
@@ -50,7 +75,7 @@ export default function App() {
       <main>
         <Routes>
           <Route path="/" element={<SearchPage onAdd={handleAdd} />} />
-          <Route path="/team" element={<TeamPage onRemove={handleRemove} team={team} onRandom={handleRandom} />} />
+          <Route path="/team" element={<TeamPage onRemove={handleRemove} team={team} onRandom={handleRandom} name={name} setName={setName}/>} />
         </Routes>
       </main>
     </>

@@ -7,13 +7,13 @@ export default function TeamAnalysis({ teamIDs }) {
   async function handleAnalyze() {
     setStatus('loading')
     try {
-      const response = await fetch('/api/analyze-team', {
+      const res = await fetch('/api/analyze-team', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ids: teamIDs }),
       })
       if (!res.ok) {setMessage(data.error?.message ?? "Couldn't analyze your team."); return;}
-      setResult(await response.json())
+      setResult(await res.json())
       setStatus('success')
     } catch {
       setStatus('error')
